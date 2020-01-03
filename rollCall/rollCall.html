@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>会是谁呢？</title>
+  <style type="text/css">
+    .roll-call-wrap {
+      margin: 50px auto;
+      border: 1px solid #FF5A44;
+      border-radius: 5px;
+      width: 500px;
+      height: 400px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    #operateBtn {
+      width: 150px;
+      height: 38px;
+      line-height: 38px;
+      font-size: 20px;
+      white-space: nowrap;
+      text-align: center;
+      border: 1px solid #FF5A44;
+      -webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+      cursor: pointer;
+      -webkit-transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+      border-radius: 4px;
+      color: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      background-color: #FF5A44;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      margin: 80px auto 0;
+    }
+
+    #operateBtn:hover {
+
+    }
+
+    #name-show-area {
+      margin-top: 50px;
+      font-size: 100px;
+      text-align: center;
+    }
+
+    .radio-wrap {
+      position: absolute;
+      bottom: 10px;
+      right: 0px;
+    }
+
+    .call-type {
+      position: relative;
+      display: inline-block;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .call-type input {
+      vertical-align: middle;
+      margin-top: -2px;
+      margin-bottom: 1px;
+      width: 20px;
+      height: 20px;
+      appearance: none;
+      -webkit-appearance: none;
+      opacity: 0;
+      outline: none;
+    }
+
+    .call-type label {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      width: 20px;
+      height: 20px;
+      border: 1px solid #7d7d7d;
+      border-radius: 100%;
+    }
+
+    .call-type input:checked + label {
+      border: 1px solid #c59c5a;
+      background: #c59c5a;
+    }
+
+    .call-type input:checked + label::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 2px;
+      width: 5px;
+      height: 12px;
+      border-right: 1px solid #fff;
+      border-bottom: 1px solid #fff;
+      transform: rotate(45deg);
+    }
+
+    .file-input{
+      position: absolute;
+      bottom: 5px;
+      left: 10px;
+    }
+
+    .file {
+      position: relative;
+      display: inline-block;
+      background: #D0EEFF;
+      border: 1px solid #99D3F5;
+      border-radius: 4px;
+      padding: 4px 12px;
+      overflow: hidden;
+      color: #1E88C7;
+      text-decoration: none;
+      text-indent: 0;
+      line-height: 20px;
+    }
+
+    .file input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+    }
+
+    .file:hover {
+      background: #AADFFD;
+      border-color: #78C3F3;
+      color: #004974;
+      text-decoration: none;
+    }
+    .class-wrap{
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="roll-call-wrap">
+  <span class="class-wrap"></span>
+  <div id="name-show-area">开始</div>
+  <div id="operateBtn">开始</div>
+  <div class="radio-wrap">
+    <div class="call-type">
+      <input type="radio" class="type-radio" id="call1" name="call_type" checked>
+      <label for="call1"></label>
+      <span>按姓名</span>
+    </div>
+    <div class="call-type">
+      <input type="radio" class="type-radio" id="call2" name="call_type">
+      <label for="call2"></label>
+      <span>按学号</span>
+    </div>
+  </div>
+  <!--<input type="file" accept="text/plain" onchange="openFile(event)">-->
+  <div class="file-input">
+    <a href="javascript:;" class="file">选择文件
+      <input type="file" name="" id="openNameTxt" onchange="openFile(event)">
+    </a>
+  </div>
+</div>
+
+<script type="text/javascript">
+  let nameList = [];
+
+  //随机函数
+  function random() {
+    let i = Math.floor(Math.random() * nameList.length);
+    let nameArea = document.getElementById("name-show-area");
+    if (getCallType() == 0) {
+      nameArea.innerHTML = nameList[i];
+    } else {
+      nameArea.innerHTML = i;
+    }
+  }
+
+  function getCallType() {
+    let types = document.getElementsByClassName("type-radio");
+    for (let i = 0; i < types.length; i++) {
+      if (types[i].checked) {
+        return i;
+      }
+    }
+  }
+
+  let operateBtn = document.getElementById("operateBtn");
+  let timer;
+  //
+  operateBtn.onclick = function () {
+    let btnValue = this.innerHTML;
+    if (nameList.length == 0) {
+      alert("请先导入学生名单！");
+    } else {
+      if (btnValue == "开始") {
+        timer = setInterval(random, 100);
+        this.innerHTML = "停";
+      } else {
+        clearInterval(timer);
+        this.innerHTML = "开始";
+      }
+    }
+  };
+
+  function openFile(event) {
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (reader.result) {
+        let fileName = document.getElementById("openNameTxt").files[0].name.split(".")[0];
+        document.getElementsByClassName("class-wrap")[0].innerHTML = fileName;
+        nameList = reader.result.split(/[\s\n]/);
+        nameList.forEach(function (currentValue, index, arr) {
+          if (currentValue == "") {
+            nameList.splice(index, 1);
+          }
+        });
+      }
+    };
+    reader.readAsText(input.files[0]);
+  };
+</script>
+</body>
+</html>
